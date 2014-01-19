@@ -1,0 +1,37 @@
+#! /usr/bin/env bash
+#
+bin=`dirname "$0"`
+bin=`cd "$bin">/dev/null; pwd`
+
+# This will set HBASE_HOME, etc.
+export HBASE_SHELL_HOME=`pwd`
+export HBASE_SHELL_CONF_DIR=$HBASE_SHELL_HOME/conf
+
+JAVA=$JAVA_HOME/bin/java
+
+# Detect if we are in hbase shell sources dir
+in_dev_env=false
+if [ -d "${HBASE_SHELL_HOME}/target" ]; then
+  in_dev_env=true
+fi
+
+# CLASSPATH initially contains $HBASE_SHELL_CONF_DIR
+CLASSPATH=.:"${HBASE_SHELL_CONF_DIR}"
+CLASSPATH=${CLASSPATH}:$JAVA_HOME/lib/tools.jar
+
+add_maven_target_jars_to_classpath() {
+  if [ -d "$HBASE_SHELL_HOME/target" ]; then
+    for f in $HBASE_SHELL_HOME/target/*.jar; do
+      CLASSPATH=${CLASSPATH}:$f;
+    done
+  fi
+}
+
+# Add maven target directory
+if $in_dev_env; then
+  add_maven_target_jars_to_classpath
+fi
+
+CLASS="org.jruby.Main -X+O ${JRUBY_OPTS} ${HBASE_SHELL_HOME}/bin/hirb.rb"
+
+java  -classpath "$CLASSPATH" $CLASS "$@"
