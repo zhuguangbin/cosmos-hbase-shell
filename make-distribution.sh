@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
+VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\['`
 FWDIR="$(cd `dirname $0`; pwd)"
-DISTDIR="$FWDIR/dist"
-VERION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\['`
+DISTDIR="$FWDIR/dist/cosmos-hbase-shell-"$VERSION
 
-echo "maven building hbase shell version "$VERION
+echo "maven building hbase shell version "$VERSION
 mvn clean package
 
 # Make directories
@@ -17,4 +17,6 @@ cp -r $FWDIR/conf "$DISTDIR"/
 cp -r $FWDIR/bin "$DISTDIR"/
 cp -r $FWDIR/lib "$DISTDIR"/
 cp $FWDIR/target/cosmos-hbase-shell-*.jar "$DISTDIR"/lib/
-tar -zcvf "cosmos-hbase-shell-"$VERION".tar.gz"  "$DISTDIR"/ 
+
+cd $FWDIR/dist/
+tar -zcvf "cosmos-hbase-shell-"$VERSION".tar.gz"  "cosmos-hbase-shell-"$VERSION 
