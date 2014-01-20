@@ -2,4 +2,5 @@
 .idea/
 .project
 .settings/
+target/
 cosmos-hbase-shell.iml
