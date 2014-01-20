@@ -19,6 +19,10 @@ fi
 CLASSPATH=.:"${HBASE_SHELL_CONF_DIR}"
 CLASSPATH=${CLASSPATH}:$JAVA_HOME/lib/tools.jar
 
+for f in $HBASE_SHELL_HOME/lib/*.jar; do
+      CLASSPATH=${CLASSPATH}:$f;
+done
+
 add_maven_target_jars_to_classpath() {
   if [ -d "$HBASE_SHELL_HOME/target" ]; then
     for f in $HBASE_SHELL_HOME/target/*.jar; do
@@ -33,5 +37,4 @@ if $in_dev_env; then
 fi
 
 CLASS="org.jruby.Main -X+O ${JRUBY_OPTS} ${HBASE_SHELL_HOME}/bin/hirb.rb"
-
 java  -classpath "$CLASSPATH" $CLASS "$@"

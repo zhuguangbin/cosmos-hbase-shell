@@ -38,6 +38,7 @@ module Hbase
         # Turn off retries in hbase and ipc.  Human doesn't want to wait on N retries.
         configuration.setInt("hbase.client.retries.number", 7)
         configuration.setInt("ipc.client.connect.max.retries", 3)
+	com.dianping.cosmos.hbase.client.CosmosHClient.getInstance
       end
     end
 
